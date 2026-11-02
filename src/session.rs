@@ -73,6 +73,11 @@ pub fn resolve_password(ctx: &Ctx) -> Result<Option<Secret>, CliError> {
         }))
 }
 
+/// The gro credential ref for a `gro:<profile>` mailbox setting.
+fn gro_ref(profile: &str) -> String {
+    format!("google-readonly/{profile}")
+}
+
 /// The configured mailbox, if any.
 fn mailbox(cfg: &Config) -> Result<Option<GroMailbox>, CliError> {
     let Some(setting) = cfg.mailbox.as_deref() else {
@@ -81,9 +86,7 @@ fn mailbox(cfg: &Config) -> Result<Option<GroMailbox>, CliError> {
     match parse_mailbox(setting)? {
         MailboxSetting::None => Ok(None),
         MailboxSetting::Gro(None) => Ok(Some(GroMailbox::new())),
-        MailboxSetting::Gro(Some(p)) => Ok(Some(
-            GroMailbox::new().credential_ref(format!("google-readonly/{p}"))?,
-        )),
+        MailboxSetting::Gro(Some(p)) => Ok(Some(GroMailbox::new().credential_ref(gro_ref(&p))?)),
     }
 }
 
@@ -232,5 +235,51 @@ impl<'a> Portal<'a> {
         }
         bundle::update(self.ctx.vault, &self.ctx.account, |b| b.jar = None)?;
         Ok(remote)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_gro_profile_becomes_its_google_readonly_ref() {
+        assert_eq!(gro_ref("work"), "google-readonly/work");
+    }
+
+    #[test]
+    fn every_profile_the_config_accepts_is_a_ref_gro_accepts() {
+        for setting in ["gro:work", "gro:a", "gro:my.profile_2", "gro:x-y"] {
+            let MailboxSetting::Gro(Some(p)) = parse_mailbox(setting).unwrap() else {
+                panic!("{setting} names a profile");
+            };
+            assert!(
+                GroMailbox::new().credential_ref(gro_ref(&p)).is_ok(),
+                "{setting}"
+            );
+        }
+        for bad in ["gro:", "gro:-x", "gro:a b"] {
+            assert!(
+                parse_mailbox(bad).is_err(),
+                "{bad} is refused at config time"
+            );
+        }
+    }
+
+    #[test]
+    fn no_mailbox_and_gro_active_profile_settings_resolve() {
+        let mut cfg = Config::default();
+        assert!(mailbox(&cfg).unwrap().is_none());
+        cfg.mailbox = Some("none".into());
+        assert!(mailbox(&cfg).unwrap().is_none());
+        cfg.mailbox = Some("gro".into());
+        assert!(mailbox(&cfg).unwrap().is_some());
+        cfg.mailbox = Some("gro:work".into());
+        assert!(mailbox(&cfg).unwrap().is_some());
+        cfg.mailbox = Some("imap".into());
+        match mailbox(&cfg) {
+            Err(e) => assert_eq!(e.exit_code(), 2),
+            Ok(_) => panic!("an unknown mailbox kind is a usage error"),
+        }
     }
 }
