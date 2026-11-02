@@ -80,6 +80,20 @@ fn info_describes_the_cli() {
 }
 
 #[test]
+fn no_color_in_the_environment_never_fails_a_command() {
+    // cli-common v0.15.1: any non-empty NO_COLOR disables color, per
+    // no-color.org; before it, NO_COLOR=1 was a usage error.
+    let home = tmp();
+    for v in ["1", "true", "0", ""] {
+        kin(&home)
+            .env("NO_COLOR", v)
+            .args(["info"])
+            .assert()
+            .success();
+    }
+}
+
+#[test]
 fn completions_render() {
     let home = tmp();
     for shell in ["bash", "zsh", "fish"] {

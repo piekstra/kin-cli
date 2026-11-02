@@ -25,11 +25,6 @@ pub const PASSWORD_ENV: &str = "KIN_PASSWORD";
 /// Password". Its snippet carries the six-digit code.
 pub const CODE_QUERY: &str = "from:help.kin.com subject:\"One-Time Password\"";
 
-/// gro's profile selector. gro 2.x removed the `--ref` flag that
-/// `GroMailbox::credential_ref` passes, while both 1.x and 2.x read this
-/// variable, so a named profile is selected through it.
-const GRO_PROFILE_ENV: &str = "GOOGLE_READONLY_CREDENTIAL_REF";
-
 /// What every command that talks to Kin needs.
 pub struct Ctx<'a> {
     pub vault: &'a dyn Vault,
@@ -85,13 +80,10 @@ fn mailbox(cfg: &Config) -> Result<Option<GroMailbox>, CliError> {
     };
     match parse_mailbox(setting)? {
         MailboxSetting::None => Ok(None),
-        MailboxSetting::Gro(profile) => {
-            if let Some(p) = profile {
-                // Single-threaded, set before any child process starts.
-                std::env::set_var(GRO_PROFILE_ENV, format!("google-readonly/{p}"));
-            }
-            Ok(Some(GroMailbox::new()))
-        }
+        MailboxSetting::Gro(None) => Ok(Some(GroMailbox::new())),
+        MailboxSetting::Gro(Some(p)) => Ok(Some(
+            GroMailbox::new().credential_ref(format!("google-readonly/{p}"))?,
+        )),
     }
 }
 
