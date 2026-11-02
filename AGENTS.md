@@ -32,8 +32,7 @@ Login is password plus a one-time code (email or text). The flow is
   through `gro` and the login finishes unattended. Without it, the code is
   prompted for on a TTY; otherwise the login is parked and the command exits
   3 naming `kin auth login --code <CODE>`.
-- `GroMailbox::credential_ref` passes `--ref`, which gro 2.x removed, so a
-  named profile is selected with `GOOGLE_READONLY_CREDENTIAL_REF` instead
+- `gro:<profile>` becomes the gro credential ref `google-readonly/<profile>`
   (`session::mailbox`).
 - Every read replays the stored session. A redirect to sign-in triggers one
   re-login and one retry (`Portal::page`).
