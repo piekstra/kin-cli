@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"><body>
+<form class="button_to" method="post" action="/users/sign_out"><input type="hidden" name="_method" value="delete" autocomplete="off" /><input type="hidden" name="authenticity_token" value="dummy-csrf-token" autocomplete="off" /></form>
+<turbo-frame id="policy-content">
+
+    <!-- Tab-specific content here -->
+    <div class="m-y-300 tab-page">
+      <div class="tab-page__left">
+        <div class="d-flex column flex-row@md between-md middle-md m-b-300">
+          <h1 class="m-y-300 fs-body-lg fw-bold">Payments</h1>
+          <div class="button-toggle">
+            <a class="button-toggle__button fs-payments-toggle--upcoming " data-turbo-frame="policy-content" href="/kin_portal/policies/KIN-DP-FL-000000001/payments?billing_status=upcoming">Upcoming</a>
+            <a class="button-toggle__button fs-payments-toggle--past button-toggle__button--active" data-turbo-frame="policy-content" href="/kin_portal/policies/KIN-DP-FL-000000001/payments?billing_status=approved">Past</a>
+          </div>
+        </div>
+        <turbo-frame id="billing-transactions">
+        <details class="billing-period-group" open>
+        <summary class="period-date-header">
+          01/01/2026 - 01/01/2027 (current term)
+        </summary>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Policy payment 1 of 4</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Apr 1, 2026</p>
+                  <a class="button button--link button--sm text fs-billing--download-receipt" target="_blank" data-rspec="download-receipt" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/receipt.pdf">Download receipt</a>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Duplicate payment</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Apr 1, 2026</p>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Refund payment</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Issued on Apr 1, 2026</p>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Policy payment 2 of 4</p>
+              <p class="m-l-auto fw-bold">$111</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Jul 1, 2026</p>
+                  <a class="button button--link button--sm text fs-billing--download-receipt" target="_blank" data-rspec="download-receipt" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/receipt.pdf">Download receipt</a>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Policy payment 3 of 4</p>
+              <p class="m-l-auto fw-bold">$111</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Oct 1, 2026</p>
+                  <a class="button button--link button--sm text fs-billing--download-receipt" target="_blank" data-rspec="download-receipt" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/receipt.pdf">Download receipt</a>
+            </div>
+          </div>
+      </details>
+      <details class="billing-period-group" >
+        <summary class="period-date-header">
+          01/01/2025 - 01/01/2026
+        </summary>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Policy payment 1 of 4</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Apr 1, 2026</p>
+                  <a class="button button--link button--sm text fs-billing--download-receipt" target="_blank" data-rspec="download-receipt" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/receipt.pdf">Download receipt</a>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Overpayment payment</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Apr 1, 2026</p>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Refund payment</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Issued on January 1, 2025</p>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Policy payment 2 of 4</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Apr 1, 2026</p>
+                  <a class="button button--link button--sm text fs-billing--download-receipt" target="_blank" data-rspec="download-receipt" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/receipt.pdf">Download receipt</a>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Policy payment 3 of 4</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Apr 1, 2026</p>
+                  <a class="button button--link button--sm text fs-billing--download-receipt" target="_blank" data-rspec="download-receipt" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/receipt.pdf">Download receipt</a>
+            </div>
+          </div>
+          <div class="billing-transaction__item">
+            <div class="billing-transaction__top-section">
+              
+<svg></svg>
+
+              <p class="fw-bold">Policy payment 4 of 4</p>
+              <p class="m-l-auto fw-bold">$111.11</p>
+            </div>
+            <div class="billing-transaction__bottom-section billing-transaction__text">
+              <p class="fs-body-sm m-b-100">Paid on Apr 1, 2026</p>
+                  <a class="button button--link button--sm text fs-billing--download-receipt" target="_blank" data-rspec="download-receipt" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/receipt.pdf">Download receipt</a>
+            </div>
+          </div>
+      </details>
+
+</turbo-frame>
+
+      </div>
+
+      <div class="tab-page__right">
+        
+        <h2 class="fs-body-lg fw-bold m-y-300">Payment method</h2>
+
+<div class="card m-b-300">
+  <div class="d-flex middle-xs gap-100 m-b-100">
+    
+<svg></svg>
+
+    <h3 data-rspec="payment-method-type" class="fs-body-md fw-bold"> Credit card</h3>
+  </div>
+  <div data-rspec="payment-method-description" class="fs-body m-b-200">
+    <p class="m-b-200"> •••• 0000  &nbsp;&nbsp; Expires: 5/2031</p>
+    <p>You're on a 4 installment recurring plan, and we will automatically charge the scheduled payment. You can also pay in advance.</p>
+  </div>
+  <div class="d-flex middle-xs gap-100">
+    
+<svg></svg>
+<span class="fs-body-sm fw-bold">Default payment method</span>
+  </div>
+  <div class="d-flex middle-xs gap-100 m-t-300">
+    <kin-button onclick="this.parentElement.querySelector('kin-dialog').show()" size="sm" variant="secondary" block="true" class="fs-payment-method--update-card">
+      Update card
+    </kin-button>
+      <kin-dialog scrollbackdrop="">
+  <h2 slot="header">Update credit card</h2>
+
+  <div data-controller="payments--adyen-credit-card" data-payments--adyen-credit-card-adyen-client-key="test_DUMMYCLIENTKEY" data-payments--adyen-credit-card-adyen-env="live" data-payments--adyen-credit-card-submission-url="/kin_portal/policies/KIN-DP-FL-000000001/credit_card/home" data-payments--adyen-credit-card-submission-action="update" data-payments--adyen-credit-card-disclaimer-url="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/recurring_payment_notice.pdf">
+  <div id='adyen-mount'></div>
+</div></kin-dialog>
+
+  </div>
+</div>
+
+
+
+
+
+        <div class="card">
+  <h2 class="m-t-100 m-b-400 fs-body-lg fw-bold ws-no-wrap"><svg></svg>Quick
+    links</h2>
+    <a class="button button--md button--secondary button--block m-y-300 fs-quick-links--download-current-doc ws-no-wrap" target="_blank" data-document-download-interaction="true" data-document-label="declaration_page" data-document-downloaded-from="quick_links" data-document-full-policy-number="KIN-DP-FL-000000001" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/declaration_page.pdf">Download declaration page</a>
+    <a class="button button--md button--secondary button--block m-y-300 ws-no-wrap fs-quick-links--submit-claim" href="https://claims.kin.com?policyNumber=KIN-DP-FL-000000001&amp;lastName=Example">Submit a claim</a>
+  <p class="text">To make a policy change, chat with an agent or give us a call at <a href="tel:5550100002" class="c-neutral-800 fw-700 td-underline fs-quick-links--phone">(555) 010-0002</a>.</p>
+</div>
+
+      </div>
+    </div>
+  </turbo-frame>
+</body></html>

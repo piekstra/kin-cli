@@ -1,0 +1,11 @@
+/target
+**/*.rs.bk
+Cargo.lock.orig
+.DS_Store
+
+# Never commit raw portal captures — they carry live session cookies,
+# pre-signed URLs, and real policy, payment and address data. Scrub into tests/fixtures/ by hand.
+/captures
+*.har
+*.raw.json
+*.raw.html

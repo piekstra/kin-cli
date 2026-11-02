@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en"><body>
+<form class="button_to" method="post" action="/users/sign_out"><input type="hidden" name="_method" value="delete" autocomplete="off" /><input type="hidden" name="authenticity_token" value="dummy-csrf-token" autocomplete="off" /></form>
+<turbo-frame id="policy-content">
+    <div class="m-y-400">
+      <div class="m-y-300 tab-page">
+        <div class="tab-page__left">
+            <div class="policy-detail policy-detail--active">
+  <div class="policy-detail__content">
+    <div class="policy-detail__top-section">
+      <div class="policy-detail__top-section-left">
+        <div class="policy-detail__product-icon">
+          <svg></svg>
+        </div>
+      </div>
+      <div class="policy-detail__top-section-right">
+        <div class="d-flex between-xs">
+          <kin-pill variant="secondary">
+            Active
+          </kin-pill>
+          
+        </div>
+        <p class="policy-detail__heading">
+          <span class="policy-detail__heading-text">
+            100 Example St, Exampleton, FL 00000-0000
+          </span>
+        </p>
+        <p class="policy-detail__policy-number" data-testid="policy-number-full">
+          Homeowner policy number:
+          <span>
+            KIN-DP-FL-000000001
+          </span>
+        </p>
+      </div>
+        <p class="policy-summary__flood_endorsement fw-bold fs-body-sm c-tertiary m-b-300 ws-no-wrap">
+          
+<svg></svg>
+
+          Flood Coverage
+        </p>
+    </div>
+    <div class="policy-detail__bottom-section">
+      <div class="policy-detail__item" data-testid="policy-premium">
+        
+<svg></svg>
+
+            <span class="fw-bold">
+              <span class="fw-bold">Current premium: </span> $1,111.11
+            </span>
+      </div>
+      <div class="policy-detail__item" data-testid="policy-period">
+        
+<svg></svg>
+
+          <span>
+            <span class="fw-bold">Policy period:</span> January 1, 2026 - January 1, 2027
+          </span>
+      </div>
+        <div class="policy-detail__item">
+          
+<svg></svg>
+
+          <span>
+            <span class="fw-bold">Primary applicant:</span> Pat Example
+          </span>
+        </div>
+        <div class="policy-detail__item">
+          
+<svg></svg>
+
+          <span>
+            <span class="fw-bold">Co-applicant:</span> Sam Example
+          </span>
+        </div>
+    </div>
+  </div>
+</div>
+
+              <div class="flex column row@md gap-200 between-md bottom-md m-t-600 m-b-300">
+                <h4>Your coverage details by policy period</h4>
+                <form action="/kin_portal/policies/KIN-DP-FL-000000001/details" accept-charset="UTF-8" method="get">
+<label class="select" for="term">
+  <span class="select__label sr-only">Viewing details for Term</span>
+  <select name="term" id="term" autocomplete="off" class="select__control"  onchange="this.form.submit()">
+      <option value="1" selected>Current Term (01/01/2026 - 01/01/2027)</option>
+      <option value="0" >Previous Term (01/01/2025 - 01/01/2026)</option>
+  </select>
+</label>
+</form>
+              </div>
+              <nav id="policy-anchor-nav" class="anchor-nav" aria-label="Page sections">
+  <button type="button" class="anchor-nav__arrow anchor-nav__arrow--start" tabindex="-1" aria-hidden="true" hidden>
+    
+<svg></svg>
+
+  </button>
+  <div class="anchor-nav__scroll">
+    
+  <a href="#deductibles" data-turbo="false" class="anchor-nav__link">
+    Deductibles
+  </a>
+  <a href="#primary-coverages" data-turbo="false" class="anchor-nav__link">
+    Primary coverage limits
+  </a>
+  <a href="#secondary-coverages" data-turbo="false" class="anchor-nav__link">
+    Other policy features & limits
+  </a>
+
+  </div>
+  <button type="button" class="anchor-nav__arrow anchor-nav__arrow--end" tabindex="-1" aria-hidden="true" hidden>
+    
+<svg></svg>
+
+  </button>
+</nav>
+<kin-anchor-nav-scroll-spy nav-id="policy-anchor-nav"></kin-anchor-nav-scroll-spy>
+<kin-anchor-nav-bar nav-id="policy-anchor-nav"></kin-anchor-nav-bar>
+
+              <div class="card card--mobile">
+                <div class="d-flex column gap-400">
+  <h6 id="deductibles">Deductibles</h6>
+  <div class="d-flex between-xs top-xs middle-sm">
+    <div class="d-flex top-xs gap-100">
+    
+<svg></svg>
+
+      <p class="fs-body-sm">
+      <span class="fw-bold d-block m-b-200 m-b-0@sm">Standard (all other perils)</span> Applies to most claims, like fire, smoke, lightning, and explosion
+      </p>
+    </div>
+    <p class="fs-body-sm fw-semi-bold fs-body-md@sm fw-bold@sm" data-rspec="standard-deductible">
+      $1,111
+    </p>
+  </div>
+  <div class="d-flex between-xs top-xs middle-sm">
+    <div class="d-flex top-xs gap-100">
+    
+<svg></svg>
+
+      <p class="fs-body-sm">
+      <span class="fw-bold d-block m-b-200 m-b-0@sm">Hurricane</span> <span data-rspec="hurricane-deductible-percentage">(2% of Coverage A)</span> Applies to claims for damage caused by hurricanes
+      </p>
+    </div>
+    <p class="fs-body-sm fw-semi-bold fs-body-md@sm fw-bold@sm" data-rspec="hurricane-deductible">
+      $11,111
+    </p>
+  </div>
+    <div class="d-flex between-xs top-xs middle-sm">
+      <div class="d-flex top-xs gap-100">
+        
+<svg></svg>
+
+        <p class="fs-body-sm">
+          <span class="fw-bold d-block m-b-200 m-b-0@sm">Flood Coverage</span> Additional flood insurance coverage
+        </p>
+      </div>
+      <p class="fs-body-sm fw-semi-bold fs-body-md@sm fw-bold@sm" data-rspec="flood-premium">
+        $111
+      </p>
+    </div>
+  <hr/>
+</div>
+
+                <div class="d-flex column m-t-400 gap-200">
+<h6 id="primary-coverages">
+  Primary coverage limits
+</h6>
+  <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="coverage_a-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="coverage_a-label">
+          Main Structure/Dwelling
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="coverage_a-value-1">
+          $111,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="coverage_a-help-text-content-1">Covers the dwelling or main living structure on your property, as well as all pools whether above or in ground.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="coverage_a-learn-more-link-1" href="https://www.kin.com/glossary/replacement-cost/">Learn More</a>
+  </details>
+</div>
+
+  <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="coverage_b-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="coverage_b-label">
+          Other Structures
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="coverage_b-value-1">
+          $11,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="coverage_b-help-text-content-1">Covers other structures on your property, like fences, detached garages, sheds, driveways, sidewalks, patios not attached to the dwelling, permanent docks, hot tubs and any other permanently installed outdoor fixtures.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="coverage_b-learn-more-link-1" href="https://www.kin.com/home-insurance/coverage-b/">Learn More</a>
+  </details>
+</div>
+
+  <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="coverage_c-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="coverage_c-label">
+          Personal Property
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="coverage_c-value-1">
+          $1,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="coverage_c-help-text-content-1">Covers personal belongings or contents in or around your home like furniture and electronics.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="coverage_c-learn-more-link-1" href="https://www.kin.com/home-insurance/coverage-c/">Learn More</a>
+      <span class="fs-body-sm" data-rspec="coverage_c-help-text-content-2">Upgrades your personal property coverage from actual cash value to replacement cost, which means we&#39;ll cover the expense of replacing damaged items with new ones of like kind and quality.</span>
+  </details>
+</div>
+
+  <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="coverage_d-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="coverage_d-label">
+          Loss of Use
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="coverage_d-value-1">
+          $111,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="coverage_d-help-text-content-1">Applies if you have a covered loss and need payment for any personal additional living expenses, for loss of use/rent, or Civil Authority Coverage.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="coverage_d-learn-more-link-1" href="https://www.kin.com/home-insurance/coverage-d/">Learn More</a>
+  </details>
+</div>
+
+  <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="coverage_l-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="coverage_l-label">
+          Personal Liability
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="coverage_l-value-1">
+          $111,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="coverage_l-help-text-content-1">Can help cover legal expenses, medical bills, and other costs associated with a covered personal liability claim.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="coverage_l-learn-more-link-1" href="https://www.kin.com/home-insurance/coverage-e/">Learn More</a>
+  </details>
+</div>
+
+  <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="coverage_m-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="coverage_m-label">
+          Medical Payments
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="coverage_m-value-1">
+          $1,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="coverage_m-help-text-content-1">Can cover medical treatment or minor medical expenses related to an injury on your property.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="coverage_m-learn-more-link-1" href="https://www.kin.com/home-insurance/coverage-f/">Learn More</a>
+  </details>
+</div>
+
+<hr>
+</div>
+
+<div class="d-flex m-t-400 column gap-200">
+  <h6 id="secondary-coverages">
+    Other policy features
+  </h6>
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="flood_and_water_backup-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="flood_and_water_backup-label">
+          Flood
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="flood_and_water_backup-value-1">
+          Applied
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="flood_and_water_backup-help-text-content-1">Covers damage to your property caused by floods.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="flood_and_water_backup-learn-more-link-1" href="https://www.kin.com/blog/flood-insurance-is-for-everyone/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="sinkhole_exclusion-icon"><svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="sinkhole_exclusion-label">
+          Sinkhole Coverage
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="sinkhole_exclusion-value-1">
+          Applied
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="sinkhole_exclusion-help-text-content-1">Covers partial loss due to sinkhole activity that does not rise to the level of a catastrophic ground cover collapse.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="sinkhole_exclusion-learn-more-link-1" href="https://www.kin.com/glossary/sinkhole-insurance/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="animal_liability-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="animal_liability-label">
+          Animal Liability
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="animal_liability-value-1">
+          $1
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="animal_liability-help-text-content-1">This can help pay for expenses related to injury or property damage caused by your dogs, cats, or other domestic pets, including medical expenses, legal fees, or damages.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="animal_liability-learn-more-link-1" href="https://www.kin.com/glossary/animal-liability/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="direct_repair-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="direct_repair-label">
+          Direct Repair
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="direct_repair-value-1">
+          Applied
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="direct_repair-help-text-content-1">Only when offered and only if you agree, in exchange for your consent to use a preferred repair vendor, your deductible obligation at loss settlement in the event of a covered property loss (other than a hurricane loss or sinkhole loss) will be reduced by 10% of the AOP deductible and the policy limit of $11,111 for repairs will be waived for a water loss.</span>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="hurricane_screened_enclosures-icon"><svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="hurricane_screened_enclosures-label">
+          Hurricane Screened Enclosures
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="hurricane_screened_enclosures-value-1">
+          $1
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="hurricane_screened_enclosures-help-text-content-1">Covers damage to screened-in areas of your property, such as pools, patios or porches caused by hurricanes or other severe storms.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="hurricane_screened_enclosures-learn-more-link-1" href="https://www.kin.com/glossary/hurricane-screen-enclosure-insurance/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="identity_theft-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="identity_theft-label">
+          Identity Fraud
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="identity_theft-value-1">
+          $1
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="identity_theft-help-text-content-1">Covers costs that result from identity theft or fraud, including defense attorney costs, daycare, or lost income from missing work for testimony.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="identity_theft-learn-more-link-1" href="https://www.kin.com/blog/does-homeowners-insurance-cover-identity-theft-or-fraud/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="limited_fungi-icon"><svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="limited_fungi-label">
+          Limited Fungi
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="limited_fungi-value-1">
+          $11,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="limited_fungi-help-text-content-1">This can help cover the costs for testing and/or damage to your home or property caused by fungi, mold, or bacteria when resulting from a covered peril. If you also have personal liability coverage, liability coverage for illnesses caused by mold or bacteria in the home is capped at $11,111.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="limited_fungi-learn-more-link-1" href="https://www.kin.com/glossary/fungi-and-mold-insurance/">Learn More</a>
+      <span class="fs-body-sm" data-rspec="limited_fungi-help-text-content-2"></span>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="loss_assessment-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="loss_assessment-label">
+          Loss Assessment
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="loss_assessment-value-1">
+          $1,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="loss_assessment-help-text-content-1">Helps pay for your share of special assessments by a homeowners association or condominium association.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="loss_assessment-learn-more-link-1" href="https://www.kin.com/condo-insurance/loss-assessment-coverage/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="ordinance_or_law-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="ordinance_or_law-label">
+          Ordinance or Law
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="ordinance_or_law-value-1">
+          $11,111
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="ordinance_or_law-help-text-content-1">Helps cover the expenses associated with meeting current construction or legal requirements.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="ordinance_or_law-learn-more-link-1" href="https://www.kin.com/glossary/law-ordinance-coverage/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="personal_injury-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="personal_injury-label">
+          Personal Injury
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="personal_injury-value-1">
+          Not applied
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="personal_injury-help-text-content-1">This can cover claims and defense costs for non-physical injury such as slander, libel, or privacy violations.</span>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="roof_surface_payment_schedule-icon"><svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="roof_surface_payment_schedule-label">
+          Roof Surface Payment Schedule
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="roof_surface_payment_schedule-value-1">
+          Not applied
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="roof_surface_payment_schedule-help-text-content-1">This endorsement affects how a loss to your roof is paid if it&#39;s damaged by wind or hail. Instead of paying the full replacement cost, the payout for covered damage will be lower as it is based on a set schedule that considers your roof&#39;s material and age.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="roof_surface_payment_schedule-learn-more-link-1" href="https://www.kin.com/faq/roof-surfacing-payment-schedule/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="special_personal_property-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="special_personal_property-label">
+          Special Personal Property
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="special_personal_property-value-1">
+          Not applied
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="special_personal_property-help-text-content-1">This additional coverage insures your personal property against all potential dangers or hazards, except for any specific exceptions noted in your policy.</span>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="water_backup-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="water_backup-label">
+          Water Backup
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="water_backup-value-1">
+          $1
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="water_backup-help-text-content-1">Covers water damage caused by a backed up sewer, drain, or sump pump – this is not and does not include flood insurance.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="water_backup-learn-more-link-1" href="https://www.kin.com/glossary/water-backup-coverage/">Learn More</a>
+  </details>
+</div>
+
+    <div class="d-flex between-xs">
+  <details>
+    <summary class="d-flex middle-xs gap-100" >
+      <div class="d-flex middle-xs gap-100">
+        <span style="display: contents" data-rspec="water_damage-icon">
+<svg></svg>
+</span>
+        <p class="fs-body-sm fw-bold" data-rspec="water_damage-label">
+          Water Damage
+        </p>
+      </div>
+        <div class="m-t-50@md m-l-auto fw-bold fs-body-sm" data-rspec="water_damage-value-1">
+          Full
+        </div>
+    </summary>
+      <span class="fs-body-sm" data-rspec="water_damage-help-text-content-1">Covers water damage that originates in the home caused by burst pipes or overflowing appliances – this is not and does not include flood insurance.</span>
+        <a target="_blank" class="link fs-body-sm" data-rspec="water_damage-learn-more-link-1" href="https://www.kin.com/blog/water-damage-home-insurance/">Learn More</a>
+  </details>
+</div>
+
+</div>
+
+              </div>
+        </div>
+        <div class="tab-page__right d-flex column gap-400">
+            <div class="card">
+  <h2 class="m-t-100 m-b-400 fs-body-lg fw-bold ws-no-wrap"><svg></svg>Quick
+    links</h2>
+    <a class="button button--md button--secondary button--block m-y-300 fs-quick-links--download-current-doc ws-no-wrap" target="_blank" data-document-download-interaction="true" data-document-label="declaration_page" data-document-downloaded-from="quick_links" data-document-full-policy-number="KIN-DP-FL-000000001" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/declaration_page.pdf">Download declaration page</a>
+    <a class="button button--md button--secondary button--block m-y-300 ws-no-wrap fs-quick-links--submit-claim" href="https://claims.kin.com?policyNumber=KIN-DP-FL-000000001&amp;lastName=Example">Submit a claim</a>
+  <p class="text">To make a policy change, chat with an agent or give us a call at <a href="tel:5550100002" class="c-neutral-800 fw-700 td-underline fs-quick-links--phone">(555) 010-0002</a>.</p>
+</div>
+
+              <div class="discounts">
+  <div class="discounts__header">
+    <h2 class="discounts__title">Your savings with Kin discounts</h2>
+  </div>
+  <div class="discounts__body">
+    <details open>
+      <summary class="discounts__amount-row">
+        <span class="discounts__amount">
+          
+<svg></svg>
+
+          <span class="discounts__total">$1,111</span>
+          <span class="discounts__period">this year</span>
+        </span>
+      </summary>
+      <h3 class="discounts__list-title">Your discounts</h3>
+      <ul class="discounts__list">
+          <li class="discounts__item">
+            
+<svg></svg>
+
+            <span>
+              <span class="discounts__item-name">Electronic Policy</span>
+            </span>
+          </li>
+          <li class="discounts__item">
+            
+<svg></svg>
+
+            <span>
+              <span class="discounts__item-name">Home Buyer Discount</span>
+            </span>
+          </li>
+          <li class="discounts__item">
+            
+<svg></svg>
+
+            <span>
+              <span class="discounts__item-name">Windstorm Mitigation</span>
+            </span>
+          </li>
+      </ul>
+
+    </details>
+  </div>
+</div>
+
+              <div class="card p-300">
+  <div class="m-b-300 fs-body-md fw-bold d-flex middle-xs gap-100">
+    
+<svg></svg>
+
+    <span>Your lender details</span>
+  </div>
+    <h3 class="fs-body-sm fw-bold">Example Mortgage Co</h3>
+    <p class="fs-body-sm">Loan number: 0000000000</p>
+    <h3 class="m-t-100 fs-body-sm fw-bold">Mortgagee clause</h3>
+    <p class="fs-body-sm">ISAOA/ATIMA<br>P.O. Box 0000<br>Exampleton, ZZ 00000-0000</p>
+      <h3 class="m-t-100 fs-body-sm fw-bold">Fax number</h3>
+      <p class="fs-body-sm">(555) 010-0001</p>
+      <h3 class="m-t-100 fs-body-sm fw-bold">Email</h3>
+      <p class="fs-body-sm">lender@example.com</p>
+</div>
+
+              
+        </div>
+      </div>
+    </div>
+  </turbo-frame>
+</body></html>

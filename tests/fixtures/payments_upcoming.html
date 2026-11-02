@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><body>
+<form class="button_to" method="post" action="/users/sign_out"><input type="hidden" name="_method" value="delete" autocomplete="off" /><input type="hidden" name="authenticity_token" value="dummy-csrf-token" autocomplete="off" /></form>
+<turbo-frame id="policy-content">
+
+    <!-- Tab-specific content here -->
+    <div class="m-y-300 tab-page">
+      <div class="tab-page__left">
+        <div class="d-flex column flex-row@md between-md middle-md m-b-300">
+          <h1 class="m-y-300 fs-body-lg fw-bold">Payments</h1>
+          <div class="button-toggle">
+            <a class="button-toggle__button fs-payments-toggle--upcoming button-toggle__button--active" data-turbo-frame="policy-content" href="/kin_portal/policies/KIN-DP-FL-000000001/payments?billing_status=upcoming">Upcoming</a>
+            <a class="button-toggle__button fs-payments-toggle--past " data-turbo-frame="policy-content" href="/kin_portal/policies/KIN-DP-FL-000000001/payments?billing_status=approved">Past</a>
+          </div>
+        </div>
+        <turbo-frame id="billing-transactions">
+        <div class="billing-transaction__item">
+        <div class="billing-transaction__top-section">
+            
+<svg></svg>
+
+          <p class="fw-bold">Policy payment 4 of 4</p>
+          <p class="m-l-auto fw-bold" data-testid="billing-transaction-amount">$111</p>
+        </div>
+        <div class="billing-transaction__bottom-section billing-transaction__text" data-testid="billing-transaction-description">
+            <p class="fs-body-sm">
+              Scheduled on Dec 1, 2026,  •••• 0000
+            </p>
+            <button onclick="this.parentElement.querySelector('kin-dialog').show()" class="button button--link button--sm text billing-transaction__make-payment-link fs-billing--make-payment">
+              Make payment
+            </button>
+            <div style="position:absolute">
+                <form data-type="html" data-target="payments--adyen-make-payment.form" data-controller="payments--adyen-make-payment" data-payments--adyen-make-payment-transaction-id="1" data-payments--adyen-make-payment-save-card-url-value="/kin_portal/policies/KIN-DP-FL-000000001/payments/home" data-payments--adyen-make-payment-billing-transaction-amount="11100" data-payments--adyen-make-payment-card-present="true" data-payments--adyen-make-payment-card-details="************0000" data-payments--adyen-make-payment-adyen-env="live" data-payments--adyen-make-payment-adyen-client-key="test_DUMMYCLIENTKEY" data-payments--adyen-make-payment-disclaimer-url="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/recurring_payment_notice.pdf" action="/kin_portal/policies/KIN-DP-FL-000000001/payments/home" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="dummy-csrf-token" autocomplete="off" /><kin-form-validation></kin-form-validation>
+  <kin-dialog id="makePaymentModal_1" scrollBackdrop data-target="payments--adyen-make-payment.dialog">
+    <h2 slot="header" data-rspec= 'make-payment-header' data-target="payments--adyen-make-payment.header" class="m-0">
+        Make a payment
+    </h2>
+
+    <div class="container p-0 d-block" data-target="payments--adyen-make-payment.paymentInfoBody">
+      <div class="row m-b-100 fs-body-md">
+        <div class="col-xs-5 fw-bold">Type:</div>
+        <div class="col-xs-7">One-Time Policy Payment</div>
+      </div>
+
+      <div class="row m-b-100 fs-body-md">
+        <div class="col-xs-5 fw-bold">Date:</div>
+        <div class="col-xs-7">01/01/2026</div>
+      </div>
+
+      <div class="row m-b-100 fs-body-md">
+        <div class="col-xs-5 fw-bold">Amount:</div>
+        <div class="col-xs-7">$111.11</div>
+      </div>
+    </div>
+
+    <div class="container p-0 d-none" data-target="payments--adyen-make-payment.paymentMethodInfoBody">
+      <div class="row m-b-200 fs-body-md">
+        <div class="col-xs-5 fw-bold">Credit card:</div>
+        <div class="col-xs-7">
+          <span data-target="payments--adyen-make-payment.paymentMethodInfoCardNumber"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container p-0 d-none" data-target="payments--adyen-make-payment.paymentSelectionBody">
+      <div class="row m-t-600">
+        <label class= "select col-xs-12" >
+          <span class="select__label">Payment method</span>
+          <select class="select__control" data-target="payments--adyen-make-payment.paymentMethod" data-action="payments--adyen-make-payment#onChangePaymentMethod" data-skip-validation="true" data-rspec="save-card-select" name="paymentMethod" id="paymentMethod"><option value="true">************0000</option>
+<option value="false">Use a different card</option></select>
+        </label>
+      </div>
+      <p class="d-none m-b-300 fs-50" data-target="payments--adyen-make-payment.savedCardFooterText">Your card will be charged immediately upon submission.</p>
+    </div>
+
+    <div class="d-block" data-target="payments--adyen-make-payment.adyenMountPoint"></div>
+
+    <div class="d-block" data-target="payments--adyen-make-payment.formContainer">
+      <div class="container p-0 m-t-300">
+        <div class="row p-0 container around-xs" >
+          <div class="col-xs-6">
+            <kin-button variant="secondary" onclick="this.closest('kin-dialog').hide()" data-target="payments--adyen-make-payment.formCancelButton" block="true">Cancel</kin-button>
+          </div>
+          <div class="col-xs-6">
+            <input type="submit" name="commit" value="Pay" data-rspec="make-payment-submit" data-action="payments--adyen-make-payment#submit" data-target="payments--adyen-make-payment.formSubmitButton" class="button button--block button--md button--primary" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="d-none" data-target="payments--adyen-make-payment.errorMessage">
+      <p>Please try again or contact us at <a href="tel:+1-555-010-0002" class="text--link secondary text--bold">(555) 010-0002</a>.</p>
+    </div>
+
+    <div class="d-none m-t-600" data-target="payments--adyen-make-payment.successOrErrorCloseButton" >
+      <button type="button" onclick="this.closest('kin-dialog').hide()" class="button button--md button--primary">Close</button>
+    </div>
+
+    <div class="m-t-300"></div>
+
+  </kin-dialog>
+</form>
+            </div>
+        </div>
+      </div>
+
+</turbo-frame>
+
+      </div>
+
+      <div class="tab-page__right">
+        
+        <h2 class="fs-body-lg fw-bold m-y-300">Payment method</h2>
+
+<div class="card m-b-300">
+  <div class="d-flex middle-xs gap-100 m-b-100">
+    
+<svg></svg>
+
+    <h3 data-rspec="payment-method-type" class="fs-body-md fw-bold"> Credit card</h3>
+  </div>
+  <div data-rspec="payment-method-description" class="fs-body m-b-200">
+    <p class="m-b-200"> •••• 0000  &nbsp;&nbsp; Expires: 5/2031</p>
+    <p>You're on a 4 installment recurring plan, and we will automatically charge the scheduled payment. You can also pay in advance.</p>
+  </div>
+  <div class="d-flex middle-xs gap-100">
+    
+<svg></svg>
+<span class="fs-body-sm fw-bold">Default payment method</span>
+  </div>
+  <div class="d-flex middle-xs gap-100 m-t-300">
+    <kin-button onclick="this.parentElement.querySelector('kin-dialog').show()" size="sm" variant="secondary" block="true" class="fs-payment-method--update-card">
+      Update card
+    </kin-button>
+      <kin-dialog scrollbackdrop="">
+  <h2 slot="header">Update credit card</h2>
+
+  <div data-controller="payments--adyen-credit-card" data-payments--adyen-credit-card-adyen-client-key="test_DUMMYCLIENTKEY" data-payments--adyen-credit-card-adyen-env="live" data-payments--adyen-credit-card-submission-url="/kin_portal/policies/KIN-DP-FL-000000001/credit_card/home" data-payments--adyen-credit-card-submission-action="update" data-payments--adyen-credit-card-disclaimer-url="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/recurring_payment_notice.pdf">
+  <div id='adyen-mount'></div>
+</div></kin-dialog>
+
+  </div>
+</div>
+
+
+
+
+
+        <div class="card">
+  <h2 class="m-t-100 m-b-400 fs-body-lg fw-bold ws-no-wrap"><svg></svg>Quick
+    links</h2>
+    <a class="button button--md button--secondary button--block m-y-300 fs-quick-links--download-current-doc ws-no-wrap" target="_blank" data-document-download-interaction="true" data-document-label="declaration_page" data-document-downloaded-from="quick_links" data-document-full-policy-number="KIN-DP-FL-000000001" href="https://app.kin.com/rails/active_storage/blobs/redirect/DUMMY--0000000000000000000000000000000000000000/declaration_page.pdf">Download declaration page</a>
+    <a class="button button--md button--secondary button--block m-y-300 ws-no-wrap fs-quick-links--submit-claim" href="https://claims.kin.com?policyNumber=KIN-DP-FL-000000001&amp;lastName=Example">Submit a claim</a>
+  <p class="text">To make a policy change, chat with an agent or give us a call at <a href="tel:5550100002" class="c-neutral-800 fw-700 td-underline fs-quick-links--phone">(555) 010-0002</a>.</p>
+</div>
+
+      </div>
+    </div>
+  </turbo-frame>
+</body></html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><body>
+<form action="/users/sign_in" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="dummy-csrf-token" autocomplete="off" /><kin-form-validation></kin-form-validation>
+    <label class="input" for="user_email">
+      <span class="input__label">Email</span>
+      <input class="input__control" required="required" type="email" value="" name="user[email]" id="user_email" />
+</label>    <div class="m-t-50 p-l-50 m-b-500 fs-body-sm">Please enter the email address associated with your policy.</div>
+
+    <kin-password-toggle>
+      <label class="input" for="user_password">
+        <span class="input__label">Password</span>
+        <input class="input__control" required="required" data-pw-toggle-input="true" type="password" name="user[password]" id="user_password" />
+</label>      <button type="button" data-pw-toggle-trigger>
+        <span data-pw-toggle-trigger-show-text>
+          <svg></svg>
+
+          <span class="sr-only">Show Password</span>
+        </span>
+        <span data-pw-toggle-trigger-hide-text>
+          <svg></svg>
+
+          <span class="sr-only">Hide Password</span>
+        </span>
+      </button>
+    </kin-password-toggle>
+
+    <div class="d-flex between-xs m-t-400">
+      <label for="user_remember_me">
+        <input name="user[remember_me]" type="hidden" value="0" autocomplete="off" /><input as="boolean" class="checkbox__control" type="checkbox" value="1" name="user[remember_me]" id="user_remember_me" />
+        <span class="fw-600">Remember me</span>
+</label>      <a href="/users/password/new">Forgot your password?</a>
+    </div>
+
+    <input type="submit" name="commit" value="Log in" class="button button--primary button--block m-t-400" />
+</form>
+</body></html>

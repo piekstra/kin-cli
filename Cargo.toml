@@ -1,0 +1,43 @@
+[package]
+name = "kin-cli"
+description = "Read-only CLI for the Kin Insurance customer portal: policies, coverages, documents, and payments."
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/piekstra/kin-cli"
+homepage = "https://github.com/piekstra/kin-cli"
+authors = ["piekstra"]
+publish = false
+
+[lib]
+name = "kin"
+path = "src/lib.rs"
+
+[[bin]]
+name = "kin"
+path = "src/main.rs"
+
+[dependencies]
+pk-cli-core = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0", features = ["reqwest"] }
+pk-cli-secrets = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0" }
+pk-cli-config = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0" }
+pk-cli-selfupdate = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0" }
+pk-cli-auth = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0" }
+pk-cli-http = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0" }
+pk-cli-documents = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0" }
+pk-cli-scrape = { git = "https://github.com/piekstra/cli-common", tag = "v0.14.0" }
+clap = { version = "4", features = ["derive", "env"] }
+clap_complete = "4"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "rustls-tls"] }
+
+[dev-dependencies]
+assert_cmd = "2"
+predicates = "3"
+
+[profile.release]
+strip = true
+lto = true
+opt-level = "z"
