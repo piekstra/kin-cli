@@ -12,7 +12,7 @@ use std::time::{Duration, Instant};
 
 use serde_json::{json, Value};
 
-const TOKEN: &str = "5f0c1e2d3b4a69788796a5b4c3d2e1f00f1e2d3c4b5a69788796a5b4c3d2e1f0";
+const TOKEN: &str = "5f0c1e2d3b4axxxxxxxxa5b4c3d2e1f00f1e2d3c4b5axxxxxxxxa5b4c3d2e1f0";
 const TOOLS: [&str; 4] = [
     "kin_policies",
     "kin_policy",
