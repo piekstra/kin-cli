@@ -100,8 +100,11 @@ Any other MCP client that launches a local server can run `kin mcp`.
 
 Unlike the commands above, the tools never sign in, never send your password and never
 ask for a one-time code, since each sign-in spends one. When Kin lets the session lapse
-they say so, and you run `kin auth login` again. That can also follow a restart of the
-server, which keeps Kin's rotated session cookie in memory only.
+they say so, and you run `kin auth login` again. Plan on that: the server keeps Kin's
+rotated session cookie in memory only, Claude starts a new server for each launch or
+session, and each new one starts from the session last stored, which only `kin` commands
+advance. How long Kin lets an idle session live has not been measured. `kin auth status
+--verify` advances the stored session without signing in, as long as it still works.
 
 **Claude on the web and mobile.** claude.ai reaches tools through a remote connector,
 and your Kin session stays on your computer, so `kin` serves the same tools from your
@@ -111,6 +114,8 @@ computer to a connector you deploy into your own Cloudflare account:
 $ kin mcp --new-token            # once: a bearer token, saved in the keychain and printed for the Worker
 $ kin mcp --http --port 8753     # serve on 127.0.0.1 only
 ```
+
+`--http` takes the token from `$KIN_MCP_TOKEN` if it is set, then from the keychain.
 
 The connector, [cli-common's `connector/`](https://github.com/piekstra/cli-common/tree/main/connector#tools-from-your-computer-home-modules),
 reaches that port through a Cloudflare Tunnel in your account; its README walks through

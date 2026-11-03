@@ -10,8 +10,8 @@ from [cli-common](https://github.com/piekstra/cli-common), pinned to **v0.22.0**
 | File | Owns |
 |---|---|
 | `src/main.rs` | the clap tree, argument checks, dispatch, exit codes |
-| `src/client.rs` | HTTP to `app.kin.com` with hand-followed redirects; the login (`KinLogin`, an `OtpTransport`) |
-| `src/session.rs` | the shared one-time-code flow wired to Kin, and `Portal`: a read that signs in again once when the session lapsed |
+| `src/client.rs` | HTTP to `app.kin.com` with hand-followed redirects (`Http::at` takes the portal base, so a test can stand a stub in); the login (`KinLogin`, an `OtpTransport`) |
+| `src/session.rs` | the shared one-time-code flow wired to Kin; `Portal`: a read that signs in again once when the session lapsed; and the read helpers `kin mcp` shares with it (`signed_in_body`, `TermSel`, `page_for_term`) |
 | `src/parse.rs` | total parsers over the server-rendered pages |
 | `src/dto.rs` | the JSON shapes and the `policies get` text view |
 | `src/bundle.rs` | the one keychain item and its two views (password source, parking slot) |

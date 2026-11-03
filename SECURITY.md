@@ -47,10 +47,13 @@ in, prompts, sends your password, reads your mailbox, asks for a one-time code, 
 or changes a keychain item, so a background server cannot spend your codes or lock your
 account, however often it restarts. Kin rotates the session cookie on each response; the
 server keeps the new copy in memory until the stored session changes, and never writes it
-to the keychain, since a write from a background server could block on a dialog. So a
-restart falls back to the stored cookie, and if that has gone stale, `kin auth login` is
+to the keychain, since a write from a background server could block on a dialog. Only `kin`
+commands advance the stored session, and every new server starts from it, which on stdio
+means each launch or session of the client. So if it has gone stale, `kin auth login` is
 needed even though the session was in use. A missing or lapsed session is an error asking
-the user to run `kin auth login` in a terminal. The Claude Desktop extension (`.mcpb`)
+the user to run `kin auth login` in a terminal. A keychain error reaches the model only as
+"could not be read": its detail can name the login email and quote the item, so `kin auth
+status` shows that in the terminal. The Claude Desktop extension (`.mcpb`)
 takes no settings and so holds no credential of its own; on macOS its bundled binary needs
 the user's approval, once, to read the `piekstra.kin` keychain item.
 

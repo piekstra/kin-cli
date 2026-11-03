@@ -11,10 +11,12 @@
 //! keychain item also holds the password; it is dropped unread. Kin rotates the
 //! session cookie, so the server keeps the newest jar in memory for as long as the
 //! keychain still holds the jar it came from, and a new sign-in takes effect at once.
-//! A restart loses that copy and falls back to the stored one, which may have gone
-//! stale: then `kin auth login` is needed even though the session was in use. A write
-//! from a background server could block on a keychain dialog, so that is the trade
-//! made here.
+//! Only `kin` commands advance the stored jar. A stdio client starts a new server for
+//! each launch or session, and every new server starts from that stored jar, so once it
+//! is past Kin's idle limit (not yet measured) the first call of a session is an auth
+//! error, even if the tools were in use just before. A write from a background server
+//! could block on a keychain dialog, and is not atomic against a sign-in in a terminal,
+//! so that is the trade made here.
 //!
 //! The parsers are best-effort, for a person who can see the page. A tool's answer
 //! goes to a model as fact, so a page that lost what the parsers look for is an
@@ -147,7 +149,15 @@ impl<V: Vault> Reads for LivePortal<V> {
         // lock is held for neither.
         let stored = self
             .vault
-            .load(&account)?
+            .load(&account)
+            // A decode error names the login email and may quote the item, which holds
+            // the password. The user's terminal can show it.
+            .map_err(|_| {
+                CliError::Other(format!(
+                    "the stored {BIN} session could not be read: ask the user to run `{BIN} \
+                     auth status` in a terminal"
+                ))
+            })?
             .and_then(|bundle| bundle.jar)
             .filter(Jar::has_session)
             .ok_or_else(|| CliError::Auth("no Kin session is stored".into()))?;
@@ -450,7 +460,7 @@ struct PaymentArgs {
     /// Past (paid, refunded) payments instead of upcoming ones.
     #[serde(default)]
     past: bool,
-    /// Upcoming and past payments.
+    /// Upcoming and past payments. Not with past.
     #[serde(default)]
     all: bool,
     #[serde(flatten)]
@@ -494,7 +504,8 @@ impl<R: Reads> KinTools<R> {
                  code, so ask for it only when a tool says it is needed. Amounts are US dollars, \
                  as decimal strings. Document results name documents and carry no contents or \
                  links; the user saves one with `kin documents download <id> -o <path>`. \
-                 kin_payments reports what Kin's payments page lists, which has shown no paging \
+                 Each new server starts from the session last stored, so a lapsed session can \
+                 show on the first call. kin_payments reports what Kin's payments page lists, which has shown no paging \
                  so far; if Kin cuts a long history short, nothing here would say so.",
             );
         Self { server, reads }

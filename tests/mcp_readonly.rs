@@ -184,6 +184,8 @@ struct Vault_ {
     inner: Rc<MemVault>,
     loads: Rc<Cell<u32>>,
     writes: Rc<Cell<u32>>,
+    /// What a load fails with, when a test makes it fail.
+    broken: Rc<Cell<Option<&'static str>>>,
 }
 
 impl Vault for Vault_ {
@@ -192,6 +194,9 @@ impl Vault for Vault_ {
     }
     fn load(&self, account: &str) -> Result<Option<Bundle>, CliError> {
         self.loads.set(self.loads.get() + 1);
+        if let Some(message) = self.broken.get() {
+            return Err(CliError::Keychain(message.to_string()));
+        }
         self.inner.load(account)
     }
     fn save(&self, account: &str, bundle: &Bundle) -> Result<(), CliError> {
@@ -453,6 +458,23 @@ fn no_configured_login_is_an_auth_error_before_the_keychain() {
     let text = fails_with(&call(&tools, "kin_policies", json!({})), "auth:");
     assert!(text.contains("`kin auth login`"), "{text}");
     assert_eq!(vault.loads.get(), 0);
+    assert!(stub.seen().is_empty());
+}
+
+/// A decode error names the account and can quote the item. Neither crosses.
+#[test]
+fn a_keychain_error_says_nothing_of_the_item_or_the_account() {
+    let (tools, stub, vault) = signed_in(Arc::new(|_, target| fixtures(target)));
+    vault.broken.set(Some(
+        "someone@example.com: invalid type: string \"dummy-fragment\", expected a bundle",
+    ));
+    let result = call(&tools, "kin_policies", json!({}));
+    assert!(result.is_error());
+    let text = result.text();
+    assert!(text.contains("`kin auth status`"), "{text}");
+    for held_back in ["someone", "example.com", "dummy-fragment", "bundle"] {
+        assert!(!text.contains(held_back), "{held_back} in {text}");
+    }
     assert!(stub.seen().is_empty());
 }
 
