@@ -11,10 +11,10 @@ use pk_cli_core::CliError;
 use pk_cli_secrets::{Secret, SecretResolver, SecretSpec};
 
 use crate::bundle::{self, ParkedView, PasswordView, Vault};
-use crate::client::{path_of, Http, KinLogin};
+use crate::client::{path_of, Http, KinLogin, Page};
 use crate::config::{parse_mailbox, Config, MailboxSetting};
 use crate::jar::Jar;
-use crate::parse;
+use crate::parse::{self, Term};
 
 pub const BIN: &str = "kin";
 
@@ -115,6 +115,84 @@ pub fn login(ctx: &Ctx, password: Option<Secret>, code: Option<&OtpCode>) -> Res
     flow.login(code)
 }
 
+/// The HTML of a page that answered a read, once a redirect to sign-in has been
+/// ruled out: anything else is not the page that was asked for.
+pub fn signed_in_body(path: &str, page: Page) -> Result<String, CliError> {
+    if page.status == 404 {
+        return Err(CliError::NotFound(format!(
+            "Kin has no page at {}",
+            path_of(path)
+        )));
+    }
+    if page.status != 200 {
+        return Err(CliError::Upstream(format!(
+            "Kin answered HTTP {} for {}",
+            page.status,
+            path_of(path)
+        )));
+    }
+    if !parse::is_signed_in(&page.body) {
+        return Err(CliError::Upstream(format!(
+            "{} did not render as a signed-in page (page changed?)",
+            path_of(path)
+        )));
+    }
+    Ok(page.body)
+}
+
+/// `current` (default), `previous`, or a term's start date (YYYY-MM-DD).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum TermSel {
+    Current,
+    Previous,
+    Starting(String),
+}
+
+pub fn parse_term(raw: &str) -> Result<TermSel, String> {
+    match raw {
+        "current" => Ok(TermSel::Current),
+        "previous" => Ok(TermSel::Previous),
+        d => pk_cli_core::dates::parse_iso(d)
+            .map(|c| TermSel::Starting(pk_cli_core::dates::fmt_iso(c)))
+            .map_err(|_| {
+                format!("`{d}` is not a term (expected current, previous, or YYYY-MM-DD)")
+            }),
+    }
+}
+
+/// Load `path` for the requested term: the page as served, re-requested with
+/// `?term=` when another term is wanted, the value coming from the page's own
+/// selector. Returns the page and the term it shows.
+pub fn page_for_term(
+    mut load: impl FnMut(&str) -> Result<String, CliError>,
+    path: &str,
+    want: &TermSel,
+) -> Result<(String, Option<Term>), CliError> {
+    let html = load(path)?;
+    let terms = parse::terms(&html);
+    let selected = terms.iter().position(|t| t.selected);
+    let target = match want {
+        TermSel::Current => return Ok((html, selected.map(|i| terms[i].clone()))),
+        TermSel::Previous => selected.and_then(|i| terms.get(i + 1)),
+        TermSel::Starting(d) => terms
+            .iter()
+            .find(|t| t.start.as_deref() == Some(d.as_str())),
+    }
+    .cloned()
+    .ok_or_else(|| {
+        CliError::NotFound(format!(
+            "no such term; this policy has: {}",
+            terms
+                .iter()
+                .map(|t| t.label.as_str())
+                .collect::<Vec<_>>()
+                .join(", ")
+        ))
+    })?;
+    let html = load(&format!("{path}?term={}", target.value))?;
+    Ok((html, Some(target)))
+}
+
 /// A portal session for one command.
 pub struct Portal<'a> {
     ctx: &'a Ctx<'a>,
@@ -153,26 +231,7 @@ impl<'a> Portal<'a> {
                 )));
             }
         }
-        if page.status == 404 {
-            return Err(CliError::NotFound(format!(
-                "Kin has no page at {}",
-                path_of(path)
-            )));
-        }
-        if page.status != 200 {
-            return Err(CliError::Upstream(format!(
-                "Kin answered HTTP {} for {}",
-                page.status,
-                path_of(path)
-            )));
-        }
-        if !parse::is_signed_in(&page.body) {
-            return Err(CliError::Upstream(format!(
-                "{} did not render as a signed-in page (page changed?)",
-                path_of(path)
-            )));
-        }
-        Ok(page.body)
+        signed_in_body(path, page)
     }
 
     fn relogin(&mut self) -> Result<(), CliError> {

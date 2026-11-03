@@ -3,7 +3,7 @@
 `kin` is a read-only CLI for the Kin Insurance customer portal
 (`app.kin.com`): policies, coverages and deductibles, documents, payments.
 It conforms to the piekstra-cli/1 spec and is built on the `pk-cli-*` crates
-from [cli-common](https://github.com/piekstra/cli-common).
+from [cli-common](https://github.com/piekstra/cli-common), pinned to **v0.22.0**.
 
 ## Layout
 
@@ -17,6 +17,7 @@ from [cli-common](https://github.com/piekstra/cli-common).
 | `src/bundle.rs` | the one keychain item and its two views (password source, parking slot) |
 | `src/jar.rs` | the cookie jar that survives between runs |
 | `src/config.rs` | non-secret settings |
+| `src/mcp.rs` | `kin mcp`: read-only tools over a read path that never signs in and never writes the keychain; its module doc says why |
 | `docs/api.md` | every request, hook and trap — read it before touching a parser |
 
 ## The auth model
@@ -35,7 +36,8 @@ Login is password plus a one-time code (email or text). The flow is
 - `gro:<profile>` becomes the gro credential ref `google-readonly/<profile>`
   (`session::mailbox`).
 - Every read replays the stored session. A redirect to sign-in triggers one
-  re-login and one retry (`Portal::page`).
+  re-login and one retry (`Portal::page`). `kin mcp` does not use `Portal`: a
+  lapsed session is an auth error there (`mcp::LivePortal`).
 
 ## One keychain item
 
@@ -55,7 +57,9 @@ every item a freshly built binary reads is its own macOS prompt. Every
   link's query is a pre-signed credential.
 - Read-only. The payments page embeds a live payment form; nothing in `kin`
   posts to it. The first write would need SPEC §1.3's confirmation gate and
-  a change to this paragraph in the same commit.
+  a change to this paragraph in the same commit. No MCP tool may reach one
+  at all: `mcp::Reads` offers page reads alone, and `tests/mcp_readonly.rs`
+  fails on anything but a GET to a listed page.
 
 ## Success is never a status code
 
@@ -75,6 +79,10 @@ after `verify_download` sees a PDF. A parser that finds nothing is exit 5
   `tests/fixtures/` (scrubbing policy in its README).
 - `tests/no_personal_data.rs` scans every tracked file for personal-data
   shapes.
+- `tests/mcp_readonly.rs` runs the tools over the real read path against a stub
+  portal on 127.0.0.1, with an in-memory vault (`Http::at` takes the host as an
+  argument, and only there). `tests/mcp_stdio.rs` and `tests/mcp_http.rs` drive
+  the binary only down paths that stop before the keychain.
 
 Every live login spends a code and Kin may rate-limit or lock the account.
 Never log in to "check something"; use the fixtures.
