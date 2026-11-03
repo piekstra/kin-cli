@@ -16,11 +16,16 @@ use pk_cli_selfupdate::{SelfUpdateArgs, Updater};
 
 use kin::bundle::{self, Vault};
 use kin::config::{self, Config};
-use kin::parse::{self, Term};
-use kin::session::{self, Ctx, Portal, BIN};
-use kin::{dto, jar::Jar};
+use kin::parse;
+use kin::session::{self, page_for_term, parse_term, Ctx, Portal, TermSel, BIN};
+use kin::{dto, jar::Jar, mcp};
 
 const REPO: &str = "piekstra/kin-cli";
+
+const FORGOT_TOKEN: &str = "`mcp --http` token removed. A running `kin mcp --http` keeps \
+                            accepting the old token until it stops: stop it, and unset \
+                            $KIN_MCP_TOKEN if it is set. A connector still in use needs \
+                            `kin mcp --new-token`.";
 
 /// Read-only CLI for the Kin Insurance customer portal: policies, coverages,
 /// documents, and payments (conforms to piekstra-cli/1).
@@ -51,6 +56,8 @@ enum Command {
     /// Scheduled and past payments.
     #[command(subcommand)]
     Payments(PaymentsCmd),
+    /// Serve the read-only tools to Claude over MCP.
+    Mcp(pk_cli_mcp::McpArgs),
     /// Update to the latest release from GitHub.
     SelfUpdate(SelfUpdateArgs),
     /// Print a shell completion script.
@@ -65,7 +72,8 @@ enum AuthCmd {
     Login(LoginCmd),
     /// Report credential and session state (auth-status/v1).
     Status(StatusArgs),
-    /// Sign out; --forget also removes the stored password and settings.
+    /// Sign out; --forget also removes the stored password, settings and `kin mcp
+    /// --http` bearer token.
     Logout(LogoutArgs),
     /// Store the password without signing in (rotation / headless setup).
     SetCredential(SetCredentialArgs),
@@ -106,29 +114,9 @@ enum ConfigCmd {
     Unset { key: String },
 }
 
-/// `current` (default), `previous`, or a term's start date (YYYY-MM-DD).
-#[derive(Debug, Clone, PartialEq, Eq)]
-enum TermSel {
-    Current,
-    Previous,
-    Starting(String),
-}
-
-fn parse_term(raw: &str) -> Result<TermSel, String> {
-    match raw {
-        "current" => Ok(TermSel::Current),
-        "previous" => Ok(TermSel::Previous),
-        d => pk_cli_core::dates::parse_iso(d)
-            .map(|c| TermSel::Starting(pk_cli_core::dates::fmt_iso(c)))
-            .map_err(|_| {
-                format!("`{d}` is not a term (expected current, previous, or YYYY-MM-DD)")
-            }),
-    }
-}
-
 #[derive(clap::Args, Debug, Clone)]
 struct PolicyArgs {
-    /// Policy number, or part of its number or address (default: the
+    /// Policy number, or part of its address (default: the
     /// configured `policy`, else the account's only policy).
     #[arg(long, value_name = "POLICY")]
     policy: Option<String>,
@@ -144,7 +132,7 @@ enum PoliciesCmd {
     List,
     /// Coverages, deductibles, premium and lender of one policy (policy/v1).
     Get {
-        /// Policy number, or part of its number or address.
+        /// Policy number, or part of its address.
         policy: Option<String>,
         /// Policy term: current, previous, or its start date (YYYY-MM-DD).
         #[arg(long, value_name = "TERM", value_parser = parse_term, default_value = "current")]
@@ -189,7 +177,7 @@ enum PaymentsCmd {
         /// Upcoming and past transactions.
         #[arg(long)]
         all: bool,
-        /// Policy number, or part of its number or address.
+        /// Policy number, or part of its address.
         #[arg(long, value_name = "POLICY")]
         policy: Option<String>,
     },
@@ -210,13 +198,19 @@ fn run(cli: &Cli) -> Result<(), CliError> {
         Command::Policies(cmd) => policies(cli, cmd, &store),
         Command::Documents(cmd) => documents(cli, cmd, &store),
         Command::Payments(cmd) => payments(cli, cmd, &store),
+        Command::Mcp(args) => pk_cli_mcp::run(args, mcp::tools()),
         Command::SelfUpdate(args) => Updater {
             repo: REPO.into(),
             binary: BIN.into(),
             target: env!("BUILD_TARGET").into(),
             current: env!("CARGO_PKG_VERSION").into(),
         }
-        .run(args, cli.common.json, cli.common.quiet),
+        .run_noting(
+            args,
+            cli.common.json,
+            cli.common.quiet,
+            &pk_cli_mcp::restart_note(BIN),
+        ),
         Command::Completions { shell } => {
             clap_complete::generate(*shell, &mut Cli::command(), BIN, &mut std::io::stdout());
             Ok(())
@@ -231,7 +225,7 @@ fn run(cli: &Cli) -> Result<(), CliError> {
                     method: "password".into(),
                     login_hint: Some(format!("{BIN} auth login")),
                 },
-                &["policies", "documents", "payments"],
+                &["policies", "documents", "payments", "mcp"],
             )
             .with_profiles(&[pk_cli_documents::PROFILE]);
             output::json(&serde_json::to_value(&info).expect("CliInfo serializes to JSON"));
@@ -356,8 +350,15 @@ fn auth(cli: &Cli, cmd: &AuthCmd, store: &ConfigStore) -> Result<(), CliError> {
         }
         AuthCmd::Logout(args) => {
             let Some(account) = cfg.username.clone() else {
+                // The bearer token outlives any login, and is what --forget promises.
+                if args.forget {
+                    creds.delete(pk_cli_mcp::HTTP_TOKEN_ACCOUNT)?;
+                }
                 if !cli.common.quiet {
                     eprintln!("not logged in");
+                    if args.forget {
+                        eprintln!("{FORGOT_TOKEN}");
+                    }
                 }
                 return Ok(());
             };
@@ -365,6 +366,10 @@ fn auth(cli: &Cli, cmd: &AuthCmd, store: &ConfigStore) -> Result<(), CliError> {
             let remote = Portal::open(&c)?.sign_out()?;
             if args.forget {
                 creds.delete(&account)?;
+                // So the next server to start cannot reuse it. A running server read
+                // the token at its start and keeps it in memory, and the variable is
+                // beyond this command: the message says what those take.
+                creds.delete(pk_cli_mcp::HTTP_TOKEN_ACCOUNT)?;
                 store.clear()?;
             }
             if !cli.common.quiet {
@@ -381,6 +386,9 @@ fn auth(cli: &Cli, cmd: &AuthCmd, store: &ConfigStore) -> Result<(), CliError> {
                         ""
                     }
                 );
+                if args.forget {
+                    eprintln!("{FORGOT_TOKEN}");
+                }
             }
             Ok(())
         }
@@ -524,39 +532,6 @@ fn pick_policy(
     }
 }
 
-/// Load `path` for the requested term: the page as served, re-requested
-/// with `?term=` when another term is wanted. Returns the page and the term
-/// it shows.
-fn page_for_term(
-    portal: &mut Portal,
-    path: &str,
-    want: &TermSel,
-) -> Result<(String, Option<Term>), CliError> {
-    let html = portal.page(path)?;
-    let terms = parse::terms(&html);
-    let selected = terms.iter().position(|t| t.selected);
-    let target = match want {
-        TermSel::Current => return Ok((html, selected.map(|i| terms[i].clone()))),
-        TermSel::Previous => selected.and_then(|i| terms.get(i + 1)),
-        TermSel::Starting(d) => terms
-            .iter()
-            .find(|t| t.start.as_deref() == Some(d.as_str())),
-    }
-    .cloned()
-    .ok_or_else(|| {
-        CliError::NotFound(format!(
-            "no such term; this policy has: {}",
-            terms
-                .iter()
-                .map(|t| t.label.as_str())
-                .collect::<Vec<_>>()
-                .join(", ")
-        ))
-    })?;
-    let html = portal.page(&format!("{path}?term={}", target.value))?;
-    Ok((html, Some(target)))
-}
-
 fn policies(cli: &Cli, cmd: &PoliciesCmd, store: &ConfigStore) -> Result<(), CliError> {
     let cfg: Config = store.load()?;
     let account = session::account(&cfg, None)?;
@@ -586,7 +561,7 @@ fn policies(cli: &Cli, cmd: &PoliciesCmd, store: &ConfigStore) -> Result<(), Cli
         PoliciesCmd::Get { policy, term } => {
             let number = pick_policy(&mut portal, &cfg, policy.as_deref())?;
             let path = format!("/kin_portal/policies/{number}/details");
-            let (html, selected) = page_for_term(&mut portal, &path, term)?;
+            let (html, selected) = page_for_term(|p| portal.page(p), &path, term)?;
             let detail = parse::policy_detail(&html).ok_or_else(|| {
                 CliError::Upstream(format!("could not read {number}'s details (page changed?)"))
             })?;
@@ -634,7 +609,7 @@ fn documents(cli: &Cli, cmd: &DocumentsCmd, store: &ConfigStore) -> Result<(), C
         };
         let number = pick_policy(&mut portal, &cfg, policy.policy.as_deref())?;
         let path = format!("/kin_portal/policies/{number}/documents");
-        let (html, term) = page_for_term(&mut portal, &path, &policy.term)?;
+        let (html, term) = page_for_term(|p| portal.page(p), &path, &policy.term)?;
         let items = parse::documents(&html);
         let date = term.as_ref().and_then(|t| t.start.clone());
         let docs: Vec<(Document, String)> = items

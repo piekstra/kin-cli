@@ -59,6 +59,7 @@ smoke: build
 	@./target/debug/$(BIN) documents download --help >/dev/null
 	@./target/debug/$(BIN) payments list --help >/dev/null
 	@./target/debug/$(BIN) auth login --help >/dev/null
+	@./target/debug/$(BIN) mcp --list-tools >/dev/null
 	@echo "smoke ok"
 
 verify: fmt-check lint test smoke

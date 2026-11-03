@@ -71,10 +71,14 @@ fn is_kin(url: &str) -> bool {
 }
 
 fn absolute(path_or_url: &str) -> String {
+    absolute_at(BASE, path_or_url)
+}
+
+fn absolute_at(base: &str, path_or_url: &str) -> String {
     if path_or_url.starts_with("https://") || path_or_url.starts_with("http://") {
         path_or_url.to_string()
     } else {
-        format!("{BASE}{path_or_url}")
+        format!("{base}{path_or_url}")
     }
 }
 
@@ -88,10 +92,19 @@ pub struct Http {
     client: Client,
     pub jar: Jar,
     verbose: bool,
+    /// The portal this session belongs to: [`BASE`] outside a test.
+    base: String,
 }
 
 impl Http {
     pub fn new(jar: Jar, verbose: bool) -> Result<Self, CliError> {
+        Self::at(BASE, jar, verbose)
+    }
+
+    /// A client for a stand-in portal, so a test can see what goes over the wire. It
+    /// is an argument here and nowhere else: no setting or variable can send the
+    /// session to another host.
+    pub fn at(base: &str, jar: Jar, verbose: bool) -> Result<Self, CliError> {
         let client = pk_cli_http::builder(BIN, env!("CARGO_PKG_VERSION"))
             .cookie_store(false)
             .redirect(Policy::none())
@@ -101,18 +114,27 @@ impl Http {
             client,
             jar,
             verbose,
+            base: base.to_string(),
         })
     }
 
+    fn is_portal(&self, url: &str) -> bool {
+        if self.base == BASE {
+            return is_kin(url);
+        }
+        url.strip_prefix(self.base.as_str())
+            .is_some_and(|rest| rest.is_empty() || rest.starts_with(['/', '?', '#']))
+    }
+
     fn send(&mut self, method: &str, rb: RequestBuilder, url: &str) -> Result<Page, CliError> {
-        let rb = match (is_kin(url), self.jar.header()) {
+        let rb = match (self.is_portal(url), self.jar.header()) {
             (true, Some(cookie)) => rb.header(COOKIE, cookie),
             _ => rb,
         };
         let resp = rb
             .send()
             .map_err(|e| upstream(&format!("{method} {}", path_of(url)), e))?;
-        if is_kin(url) {
+        if self.is_portal(url) {
             self.jar.absorb(resp.headers());
         }
         let status = resp.status().as_u16();
@@ -120,7 +142,7 @@ impl Http {
             .headers()
             .get(LOCATION)
             .and_then(|v| v.to_str().ok())
-            .map(absolute);
+            .map(|l| absolute_at(&self.base, l));
         let body = resp
             .text()
             .map_err(|e| upstream(&format!("reading {}", path_of(url)), e))?;
@@ -137,14 +159,14 @@ impl Http {
 
     /// One GET, redirects not followed.
     pub fn get(&mut self, path: &str) -> Result<Page, CliError> {
-        let url = absolute(path);
+        let url = absolute_at(&self.base, path);
         let rb = self.client.get(&url);
         self.send("GET", rb, &url)
     }
 
     /// One form POST, redirects not followed.
     pub fn post_form(&mut self, path: &str, fields: &[(&str, &str)]) -> Result<Page, CliError> {
-        let url = absolute(path);
+        let url = absolute_at(&self.base, path);
         let rb = self.client.post(&url).form(fields);
         self.send("POST", rb, &url)
     }
@@ -159,7 +181,7 @@ impl Http {
                 return Ok(page);
             }
             let next = page.location.clone().unwrap_or_default();
-            if !is_kin(&next) {
+            if !self.is_portal(&next) {
                 return Err(CliError::Upstream(format!(
                     "Kin redirected {} off the portal",
                     path_of(&page.url)

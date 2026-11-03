@@ -77,6 +77,17 @@ never from layout classes.
 - **The payments page embeds a live payment form** (Adyen, "Pay" submits
   immediately). `kin` is read-only and never posts to it.
 
+## What `kin mcp` reads
+
+The policies, details, documents and payments rows above, and nothing else: GETs alone,
+with the stored session, through `mcp::LivePortal`. A number or `?term=` value in a path
+comes from the portal's own page, never from a tool argument. It treats what the commands
+tolerate as an error, so a model is not told a wrong answer: no policy card, a card or row
+the parsers could not read, no document, a payments page without its
+`turbo-frame#billing-transactions`, an amount in that frame with no row read, a row whose
+amount is not money, and a page for another term still showing its `selected` option on
+the first one.
+
 ## Not yet verified
 
 - How long an idle session lasts before Kin redirects to sign-in.

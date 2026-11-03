@@ -8,5 +8,6 @@ pub mod client;
 pub mod config;
 pub mod dto;
 pub mod jar;
+pub mod mcp;
 pub mod parse;
 pub mod session;

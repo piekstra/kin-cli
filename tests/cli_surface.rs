@@ -54,6 +54,7 @@ fn every_command_renders_help() {
         vec!["self-update", "--help"],
         vec!["completions", "--help"],
         vec!["info", "--help"],
+        vec!["mcp", "--help"],
     ] {
         kin(&home).args(&args).assert().success();
     }
@@ -76,7 +77,7 @@ fn info_describes_the_cli() {
         .iter()
         .map(|c| c.as_str().unwrap())
         .collect();
-    assert_eq!(caps, ["policies", "documents", "payments"]);
+    assert_eq!(caps, ["policies", "documents", "payments", "mcp"]);
 }
 
 #[test]
