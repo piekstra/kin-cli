@@ -22,11 +22,6 @@ use kin::{dto, jar::Jar, mcp};
 
 const REPO: &str = "piekstra/kin-cli";
 
-const FORGOT_TOKEN: &str = "`mcp --http` token removed. A running `kin mcp --http` keeps \
-                            accepting the old token until it stops: stop it, and unset \
-                            $KIN_MCP_TOKEN if it is set. A connector still in use needs \
-                            `kin mcp --new-token`.";
-
 /// Read-only CLI for the Kin Insurance customer portal: policies, coverages,
 /// documents, and payments (conforms to piekstra-cli/1).
 #[derive(Parser, Debug)]
@@ -351,25 +346,28 @@ fn auth(cli: &Cli, cmd: &AuthCmd, store: &ConfigStore) -> Result<(), CliError> {
         AuthCmd::Logout(args) => {
             let Some(account) = cfg.username.clone() else {
                 // The bearer token outlives any login, and is what --forget promises.
-                if args.forget {
-                    creds.delete(pk_cli_mcp::HTTP_TOKEN_ACCOUNT)?;
-                }
+                let token_removed = if args.forget {
+                    Some(creds.delete(pk_cli_mcp::HTTP_TOKEN_ACCOUNT)?)
+                } else {
+                    None
+                };
                 if !cli.common.quiet {
                     eprintln!("not logged in");
-                    if args.forget {
-                        eprintln!("{FORGOT_TOKEN}");
+                    if let Some(removed) = token_removed {
+                        eprintln!("{}", pk_cli_mcp::forget_note(BIN, removed));
                     }
                 }
                 return Ok(());
             };
             let c = ctx(cli, &cfg, &creds, account.clone());
             let remote = Portal::open(&c)?.sign_out()?;
+            let mut token_removed = None;
             if args.forget {
                 creds.delete(&account)?;
                 // So the next server to start cannot reuse it. A running server read
                 // the token at its start and keeps it in memory, and the variable is
                 // beyond this command: the message says what those take.
-                creds.delete(pk_cli_mcp::HTTP_TOKEN_ACCOUNT)?;
+                token_removed = Some(creds.delete(pk_cli_mcp::HTTP_TOKEN_ACCOUNT)?);
                 store.clear()?;
             }
             if !cli.common.quiet {
@@ -386,8 +384,8 @@ fn auth(cli: &Cli, cmd: &AuthCmd, store: &ConfigStore) -> Result<(), CliError> {
                         ""
                     }
                 );
-                if args.forget {
-                    eprintln!("{FORGOT_TOKEN}");
+                if let Some(removed) = token_removed {
+                    eprintln!("{}", pk_cli_mcp::forget_note(BIN, removed));
                 }
             }
             Ok(())

@@ -3,7 +3,7 @@
 `kin` is a read-only CLI for the Kin Insurance customer portal
 (`app.kin.com`): policies, coverages and deductibles, documents, payments.
 It conforms to the piekstra-cli/1 spec and is built on the `pk-cli-*` crates
-from [cli-common](https://github.com/piekstra/cli-common), pinned to **v0.22.0**.
+from [cli-common](https://github.com/piekstra/cli-common), pinned to **v0.29.0**.
 
 ## Layout
 
