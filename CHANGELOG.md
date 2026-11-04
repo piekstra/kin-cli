@@ -3,6 +3,11 @@
 All notable changes to `kin` are documented here. Newest first. The project follows
 [SemVer](https://semver.org/); until 1.0, minors carry the breaking-change signal.
 
+## 0.2.1 — 2026-11-04
+
+- `auth logout --forget` says what the connector token's state leaves true, and claims a removal only when there was an item: a running `kin mcp --http` keeps the token it started with, and one on `$KIN_MCP_TOKEN` never had an item to remove.
+- cli-common v0.29.0, up from v0.22.0, which brings the Windows config and self-update fixes.
+
 ## 0.2.0 — 2026-11-03
 
 - `kin mcp`: four read-only tools for Claude: `kin_policies`, `kin_policy`, `kin_documents`
