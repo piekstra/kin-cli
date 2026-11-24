@@ -47,8 +47,31 @@ fn is_dummy_number(n: &str) -> bool {
         || n.starts_with("1555")
 }
 
+/// Replaces each 40-character lowercase hex run, the commit SHA a pinned
+/// action carries, with `x`s, so its digits are not read as a number.
+fn mask_commit_shas(line: &str) -> String {
+    let mut out = String::with_capacity(line.len());
+    let mut run = String::new();
+    for c in line.chars().chain(std::iter::once('\n')) {
+        if matches!(c, '0'..='9' | 'a'..='f') {
+            run.push(c);
+            continue;
+        }
+        if run.len() == 40 {
+            out.push_str(&"x".repeat(40));
+        } else {
+            out.push_str(&run);
+        }
+        run.clear();
+        out.push(c);
+    }
+    out.pop();
+    out
+}
+
 /// The personal-data shapes on one line, each as `kind value`.
 fn scan_line(line: &str) -> Vec<String> {
+    let line = &mask_commit_shas(line);
     let mut findings = Vec::new();
     // Phone, loan, policy and card numbers: 7+ digit runs, and the
     // 3-3-4 phone shape.
@@ -185,6 +208,7 @@ fn the_scanner_flags_real_shapes_and_passes_dummies() {
         "pat@example.com, uwsupport@kin.com",
         "100 Example St, Exampleton",
         "$111,111.11",
+        "- uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4",
     ] {
         assert!(
             scan_line(dummy).is_empty(),
