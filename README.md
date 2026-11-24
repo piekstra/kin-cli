@@ -147,4 +147,6 @@ parsers rely on, and the traps.
 
 ## License
 
-MIT or Apache-2.0.
+Copyright (C) 2026 Caleb Piekstra. Licensed under the GNU Affero General Public
+License, version 3 only (AGPL-3.0-only); see [LICENSE](LICENSE). Releases up to
+and including v0.2.1 were published under MIT OR Apache-2.0.
